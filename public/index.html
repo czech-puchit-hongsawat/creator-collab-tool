@@ -87,6 +87,17 @@
                     </div>
                 </div>
 
+                <!-- Video Type Toggle -->
+                <div class="video-type-section">
+                    <label>Video Type</label>
+                    <div class="video-type-toggle">
+                        <button type="button" id="calcLongBtn" class="toggle-btn active"
+                            onclick="setCalcVideoType('long')">Long Videos</button>
+                        <button type="button" id="calcShortsBtn" class="toggle-btn"
+                            onclick="setCalcVideoType('shorts')">Shorts</button>
+                    </div>
+                </div>
+
                 <!-- Manual Mode Form -->
                 <div id="manualModeSection">
                     <div class="form-group">
@@ -96,12 +107,12 @@
                     </div>
 
                     <div class="filters">
-                        <div class="form-group">
+                        <div class="form-group" id="integrationVideosGroup">
                             <label for="integrationVideos"># Integration Videos (15s)</label>
                             <input type="number" id="integrationVideos" value="1" min="0">
                         </div>
                         <div class="form-group">
-                            <label for="fullVideos"># Full Videos (5+ min)</label>
+                            <label for="fullVideos" id="fullVideosLabel"># Full Videos (5+ min)</label>
                             <input type="number" id="fullVideos" value="1" min="0">
                         </div>
                     </div>
@@ -133,12 +144,12 @@
                     </div>
 
                     <div class="filters">
-                        <div class="form-group">
+                        <div class="form-group" id="reverseIntegrationGroup">
                             <label for="reverseIntegrationVideos"># Integration Videos (15s)</label>
                             <input type="number" id="reverseIntegrationVideos" value="1" min="0">
                         </div>
                         <div class="form-group">
-                            <label for="reverseFullVideos"># Full Videos (5+ min)</label>
+                            <label for="reverseFullVideos" id="reverseFullVideosLabel"># Full Videos (5+ min)</label>
                             <input type="number" id="reverseFullVideos" value="1" min="0">
                         </div>
                     </div>

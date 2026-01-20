@@ -2,12 +2,14 @@
 let selectedVideoType = 'long';
 let selectedPlatform = 'youtube';
 let selectedCalcMode = 'manual';
+let selectedCalcVideoType = 'long';  // Calculator video type (long/shorts)
 let hasCommission = false;
 let hasReverseCommission = false;
 
 // Constants for ROAS calculations
 const INTEGRATION_SPV = 0.03;  // $0.03 per view for 15s integration
 const FULL_VIDEO_SPV = 0.13;   // $0.13 per view for full video
+const SHORTS_SPV = 0.03;       // $0.03 per view for shorts (full short video)
 const TARGET_ROAS = 5;         // Target 5x ROAS
 
 // Platform switching
@@ -47,6 +49,43 @@ function setCalcMode(mode) {
     document.getElementById('reverseModeSection').classList.toggle('hidden', mode !== 'reverse');
 
     // Hide results
+    document.getElementById('roasResults').classList.add('hidden');
+    document.getElementById('maxBudgetResults').classList.add('hidden');
+}
+
+// Calculator video type toggle (Long Videos / Shorts)
+function setCalcVideoType(type) {
+    selectedCalcVideoType = type;
+
+    // Update button states
+    document.getElementById('calcLongBtn').classList.toggle('active', type === 'long');
+    document.getElementById('calcShortsBtn').classList.toggle('active', type === 'shorts');
+
+    // Show/hide integration videos input (only for Long Videos)
+    const integrationGroup = document.getElementById('integrationVideosGroup');
+    const reverseIntegrationGroup = document.getElementById('reverseIntegrationGroup');
+
+    if (type === 'shorts') {
+        // Hide integration inputs for Shorts
+        if (integrationGroup) integrationGroup.classList.add('hidden');
+        if (reverseIntegrationGroup) reverseIntegrationGroup.classList.add('hidden');
+        // Update label for Shorts
+        const fullLabel = document.getElementById('fullVideosLabel');
+        const reverseFullLabel = document.getElementById('reverseFullVideosLabel');
+        if (fullLabel) fullLabel.textContent = '# Short Videos';
+        if (reverseFullLabel) reverseFullLabel.textContent = '# Short Videos';
+    } else {
+        // Show integration inputs for Long Videos
+        if (integrationGroup) integrationGroup.classList.remove('hidden');
+        if (reverseIntegrationGroup) reverseIntegrationGroup.classList.remove('hidden');
+        // Update label for Long Videos
+        const fullLabel = document.getElementById('fullVideosLabel');
+        const reverseFullLabel = document.getElementById('reverseFullVideosLabel');
+        if (fullLabel) fullLabel.textContent = '# Full Videos (5+ min)';
+        if (reverseFullLabel) reverseFullLabel.textContent = '# Full Videos (5+ min)';
+    }
+
+    // Hide results when switching
     document.getElementById('roasResults').classList.add('hidden');
     document.getElementById('maxBudgetResults').classList.add('hidden');
 }
@@ -209,9 +248,18 @@ function calculateROAS() {
 
     errorDiv.classList.add('hidden');
 
-    // Calculate sales
-    const integrationSales = avgViews * INTEGRATION_SPV * integrationVideos;
-    const fullVideoSales = avgViews * FULL_VIDEO_SPV * fullVideos;
+    // Calculate sales based on video type
+    let integrationSales = 0;
+    let fullVideoSales = 0;
+
+    if (selectedCalcVideoType === 'shorts') {
+        // Shorts: Only full video sales using SHORTS_SPV
+        fullVideoSales = avgViews * SHORTS_SPV * fullVideos;
+    } else {
+        // Long Videos: Both integration and full video sales
+        integrationSales = avgViews * INTEGRATION_SPV * integrationVideos;
+        fullVideoSales = avgViews * FULL_VIDEO_SPV * fullVideos;
+    }
     const totalSales = integrationSales + fullVideoSales;
 
     // Calculate cost with commission
@@ -219,7 +267,7 @@ function calculateROAS() {
     const totalCost = quote + commission;
 
     // Calculate CPM
-    const totalVideos = integrationVideos + fullVideos;
+    const totalVideos = selectedCalcVideoType === 'shorts' ? fullVideos : (integrationVideos + fullVideos);
     const cpm = totalVideos > 0 ? (quote / (avgViews / 1000) / totalVideos) : 0;
 
     // Calculate ROAS
@@ -269,9 +317,18 @@ function calculateMaxBudget() {
 
     errorDiv.classList.add('hidden');
 
-    // Calculate expected sales
-    const integrationSales = avgViews * INTEGRATION_SPV * integrationVideos;
-    const fullVideoSales = avgViews * FULL_VIDEO_SPV * fullVideos;
+    // Calculate expected sales based on video type
+    let integrationSales = 0;
+    let fullVideoSales = 0;
+
+    if (selectedCalcVideoType === 'shorts') {
+        // Shorts: Only full video sales using SHORTS_SPV
+        fullVideoSales = avgViews * SHORTS_SPV * fullVideos;
+    } else {
+        // Long Videos: Both integration and full video sales
+        integrationSales = avgViews * INTEGRATION_SPV * integrationVideos;
+        fullVideoSales = avgViews * FULL_VIDEO_SPV * fullVideos;
+    }
     const totalSales = integrationSales + fullVideoSales;
 
     // Calculate max budget for 5x ROAS
