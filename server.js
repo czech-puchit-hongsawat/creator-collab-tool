@@ -11,7 +11,7 @@ const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Helper function to extract channel ID from various URL formats
 async function getChannelId(channelUrl) {
@@ -280,6 +280,12 @@ function formatDuration(seconds) {
     }
 }
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
+// Start server only if running locally (not on Vercel)
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}`);
+    });
+}
+
+// Export for Vercel
+module.exports = app;
