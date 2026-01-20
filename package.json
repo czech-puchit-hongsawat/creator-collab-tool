@@ -1,0 +1,22 @@
+{
+  "name": "creator-collab-tool",
+  "version": "1.0.0",
+  "description": "Calculate average views and ROAS for YouTuber collaborations",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "youtube",
+    "tiktok",
+    "roas",
+    "marketing",
+    "analytics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

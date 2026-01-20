@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Collaboration Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Creator Collaboration Tool</h1>
+            <p>Calculate average views and ROAS for YouTuber collaborations.</p>
+        </header>
+
+        <main>
+            <!-- Platform Tabs -->
+            <div class="platform-tabs">
+                <button type="button" id="youtubeTab" class="platform-tab active" onclick="setPlatform('youtube')">
+                    📺 YouTube
+                </button>
+                <button type="button" id="tiktokTab" class="platform-tab" onclick="setPlatform('tiktok')">
+                    🎵 TikTok
+                </button>
+                <button type="button" id="calculatorTab" class="platform-tab" onclick="setPlatform('calculator')">
+                    💰 Calculator
+                </button>
+            </div>
+
+            <!-- YouTube Section -->
+            <div id="youtubeSection" class="card input-section">
+                <div class="form-group">
+                    <label for="channelUrl">Channel URL</label>
+                    <input type="text" id="channelUrl" placeholder="https://www.youtube.com/@channelname">
+                    <small>Supports @username, /channel/, /c/, and /user/ formats.</small>
+                </div>
+
+                <div class="filters">
+                    <div class="form-group">
+                        <label for="skipMonths">Skip Videos Newer Than (Months)</label>
+                        <input type="number" id="skipMonths" value="3" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="videoCount">Number of Videos to Count</label>
+                        <input type="number" id="videoCount" value="24" min="1">
+                    </div>
+                </div>
+
+                <div class="video-type-section">
+                    <label>Video Type</label>
+                    <div class="video-type-toggle">
+                        <button type="button" id="longVideosBtn" class="toggle-btn active"
+                            onclick="setVideoType('long')">Long Videos</button>
+                        <button type="button" id="shortsBtn" class="toggle-btn"
+                            onclick="setVideoType('shorts')">Shorts</button>
+                    </div>
+                </div>
+
+                <button id="calculateBtn" onclick="calculateViews()">Calculate Average</button>
+            </div>
+
+            <!-- TikTok Section -->
+            <div id="tiktokSection" class="card input-section hidden">
+                <div class="form-group">
+                    <label for="tiktokViews">Paste View Counts</label>
+                    <textarea id="tiktokViews" rows="8"
+                        placeholder="Paste view counts here, one per line. Example:&#10;1.2M&#10;850K&#10;125000&#10;45.6K"></textarea>
+                    <small>Supports formats: 1.2M, 850K, 125000, etc. One view count per line.</small>
+                </div>
+
+                <button id="calculateTiktokBtn" onclick="calculateTiktokViews()">Calculate Average</button>
+            </div>
+
+            <!-- Calculator Section -->
+            <div id="calculatorSection" class="card input-section hidden">
+                <!-- Mode Toggle -->
+                <div class="video-type-section">
+                    <label>Calculator Mode</label>
+                    <div class="video-type-toggle">
+                        <button type="button" id="manualModeBtn" class="toggle-btn active"
+                            onclick="setCalcMode('manual')">Manual Mode</button>
+                        <button type="button" id="reverseModeBtn" class="toggle-btn"
+                            onclick="setCalcMode('reverse')">Reverse Mode</button>
+                    </div>
+                </div>
+
+                <!-- Manual Mode Form -->
+                <div id="manualModeSection">
+                    <div class="form-group">
+                        <label for="calcAvgViews">Average Views</label>
+                        <input type="number" id="calcAvgViews" placeholder="e.g., 50000" min="0">
+                        <small>Enter the average view count (or copy from YouTube/TikTok tab)</small>
+                    </div>
+
+                    <div class="filters">
+                        <div class="form-group">
+                            <label for="integrationVideos"># Integration Videos (15s)</label>
+                            <input type="number" id="integrationVideos" value="1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="fullVideos"># Full Videos (5+ min)</label>
+                            <input type="number" id="fullVideos" value="1" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fullQuote">YouTuber's Quote ($)</label>
+                        <input type="number" id="fullQuote" placeholder="e.g., 5000" min="0" step="0.01">
+                    </div>
+
+                    <div class="video-type-section">
+                        <label>Commission? (5% of sales)</label>
+                        <div class="video-type-toggle">
+                            <button type="button" id="commissionNo" class="toggle-btn active"
+                                onclick="setCommission(false)">No</button>
+                            <button type="button" id="commissionYes" class="toggle-btn"
+                                onclick="setCommission(true)">Yes</button>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateROAS()">Calculate ROAS</button>
+                </div>
+
+                <!-- Reverse Mode Form -->
+                <div id="reverseModeSection" class="hidden">
+                    <div class="form-group">
+                        <label for="reverseAvgViews">Average Views</label>
+                        <input type="number" id="reverseAvgViews" placeholder="e.g., 50000" min="0">
+                        <small>Enter the average view count</small>
+                    </div>
+
+                    <div class="filters">
+                        <div class="form-group">
+                            <label for="reverseIntegrationVideos"># Integration Videos (15s)</label>
+                            <input type="number" id="reverseIntegrationVideos" value="1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="reverseFullVideos"># Full Videos (5+ min)</label>
+                            <input type="number" id="reverseFullVideos" value="1" min="0">
+                        </div>
+                    </div>
+
+                    <div class="video-type-section">
+                        <label>Include Commission? (5%)</label>
+                        <div class="video-type-toggle">
+                            <button type="button" id="reverseCommissionNo" class="toggle-btn active"
+                                onclick="setReverseCommission(false)">No</button>
+                            <button type="button" id="reverseCommissionYes" class="toggle-btn"
+                                onclick="setReverseCommission(true)">Yes</button>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateMaxBudget()">Calculate Max Budget</button>
+                </div>
+            </div>
+
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p id="loadingText">Fetching data...</p>
+            </div>
+
+            <!-- View Results -->
+            <div id="results" class="hidden">
+                <div class="result-card">
+                    <h2>Average Views</h2>
+                    <div class="avg-number" id="avgResult">0</div>
+                    <p class="subtitle">Based on <span id="countResult">0</span> videos</p>
+                </div>
+
+                <div id="videoDetailsSection">
+                    <h3>Video Details</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Video Title</th>
+                                    <th>Upload Date</th>
+                                    <th>Duration</th>
+                                    <th>Views</th>
+                                </tr>
+                            </thead>
+                            <tbody id="videoList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tiktokDetailsSection" class="hidden">
+                    <h3>View Counts Entered</h3>
+                    <div class="tiktok-views-list" id="tiktokViewsList">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROAS Results -->
+            <div id="roasResults" class="hidden">
+                <div class="result-card" id="roasCard">
+                    <h2>ROAS</h2>
+                    <div class="avg-number" id="roasResult">0x</div>
+                    <p class="subtitle" id="roasVerdict">-</p>
+                </div>
+
+                <div class="roas-details">
+                    <div class="roas-detail-item">
+                        <span class="label">Integration Sales</span>
+                        <span class="value" id="integrationSales">$0</span>
+                    </div>
+                    <div class="roas-detail-item">
+                        <span class="label">Full Video Sales</span>
+                        <span class="value" id="fullVideoSales">$0</span>
+                    </div>
+                    <div class="roas-detail-item">
+                        <span class="label">Total Expected Sales</span>
+                        <span class="value highlight" id="totalSales">$0</span>
+                    </div>
+                    <div class="roas-detail-item">
+                        <span class="label">Quote + Commission</span>
+                        <span class="value" id="totalCost">$0</span>
+                    </div>
+                    <div class="roas-detail-item">
+                        <span class="label">CPM</span>
+                        <span class="value" id="cpmResult">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Max Budget Results -->
+            <div id="maxBudgetResults" class="hidden">
+                <div class="result-card good">
+                    <h2>Max Budget for 5x ROAS</h2>
+                    <div class="avg-number" id="maxBudgetResult">$0</div>
+                    <p class="subtitle" id="maxBudgetSubtitle">Maximum quote you can offer</p>
+                </div>
+
+                <div class="roas-details">
+                    <div class="roas-detail-item">
+                        <span class="label">Integration Sales</span>
+                        <span class="value" id="reverseIntegrationSales">$0</span>
+                    </div>
+                    <div class="roas-detail-item">
+                        <span class="label">Full Video Sales</span>
+                        <span class="value" id="reverseFullVideoSales">$0</span>
+                    </div>
+                    <div class="roas-detail-item">
+                        <span class="label">Total Expected Sales</span>
+                        <span class="value highlight" id="reverseTotalSales">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="error" class="error-msg hidden"></div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

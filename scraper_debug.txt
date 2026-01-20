@@ -1,0 +1,34 @@
+Starting scrape for https://www.youtube.com/@devonloerop/videos, skipping 3 months, looking for 24 videos.
+Target Age Days: 90
+Visible videos on page: 28
+[+] Added: Adding a Game Changer Amenity to my Container Home Airbnb (4 months ago, 15000)
+Filtered videos added in this pass: 1. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 28
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 55
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 55
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 72
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 72
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 72
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 72
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 72
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Visible videos on page: 72
+Filtered videos added in this pass: 0. Total collected: 1
+Waiting for more content... (Timeout)
+Stopped: No new content after multiple scrolling attempts.
