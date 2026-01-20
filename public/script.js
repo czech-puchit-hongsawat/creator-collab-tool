@@ -9,7 +9,7 @@ let hasReverseCommission = false;
 // Constants for ROAS calculations
 const INTEGRATION_SPV = 0.03;  // $0.03 per view for 15s integration
 const FULL_VIDEO_SPV = 0.13;   // $0.13 per view for full video
-const SHORTS_SPV = 0.03;       // $0.03 per view for shorts (full short video)
+const SHORTS_SPV = 0.01;       // $0.01 per view for shorts (full short video)
 const TARGET_ROAS = 5;         // Target 5x ROAS
 
 // Platform switching
